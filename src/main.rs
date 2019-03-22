@@ -29,7 +29,7 @@ use std::time::{Duration, Instant};
 
 mod snake;
 
-const UPDATE_MILLIS: u64 = 1000;
+const UPDATE_MILLIS: u64 = 110;
 
 fn main() -> GameResult {
     let (mut context, mut event_loop) =
@@ -80,8 +80,6 @@ impl EventHandler for GameState {
                 match self.snake_state {
                     SnakeState::Food => {
                         let direction = self.input_direction;
-                        // COMBAK: might not need to track each segment's
-                        // direction
                         let new_head = self
                             .snake
                             .compute_next_head(direction)
