@@ -29,7 +29,7 @@ use std::time::{Duration, Instant};
 
 mod snake;
 
-const UPDATE_MILLIS: u64 = 110;
+const UPDATE_MILLIS_CHANGE: u64 = 1;
 
 fn main() -> GameResult {
     let (mut context, mut event_loop) =
@@ -50,6 +50,7 @@ struct GameState {
     input_direction: Direction,
     game_over: bool,
     last_update: Instant,
+    update_millis: Duration,
     rng: ThreadRng,
 }
 
@@ -67,6 +68,7 @@ impl GameState {
             input_direction: DEFAULT_DIRECTION,
             game_over: false,
             last_update: Instant::now(),
+            update_millis: Duration::from_millis(100)
         }
     }
 }
@@ -74,7 +76,7 @@ impl GameState {
 impl EventHandler for GameState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
         if Instant::now() - self.last_update
-            >= Duration::from_millis(UPDATE_MILLIS)
+            >= self.update_millis
         {
             if !self.game_over {
                 match self.snake_state {
@@ -92,6 +94,7 @@ impl EventHandler for GameState {
                             GRID_DIMENSIONS.0,
                             GRID_DIMENSIONS.1,
                         );
+                        self.update_millis -= Duration::from_millis(UPDATE_MILLIS_CHANGE);
                         // TODO: make sure food does not spawn on body
                         self.snake_state =
                             get_snake_state(&self.snake, &self.food);
