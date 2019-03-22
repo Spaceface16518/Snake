@@ -128,16 +128,9 @@ impl EventHandler for GameState {
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         clear_screen(ctx);
-        let snake_mesh = self.snake.get_mesh(ctx)?;
-        draw(
-            ctx,
-            &snake_mesh,
-            (MintPoint2 {
-                x: 0.0,
-                y: 0.0,
-            },),
-        )?;
         let food_mesh = self.food.get_mesh(ctx)?;
+        let snake_mesh = self.snake.get_mesh(ctx)?;
+
         draw(
             ctx,
             &food_mesh,
@@ -146,6 +139,15 @@ impl EventHandler for GameState {
                 y: 0.0,
             },),
         )?;
+        draw(
+            ctx,
+            &snake_mesh,
+            (MintPoint2 {
+                x: 0.0,
+                y: 0.0,
+            },),
+        )?;
+
         present(ctx)?;
         yield_now();
         Ok(())
