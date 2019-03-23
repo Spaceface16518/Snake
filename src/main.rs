@@ -28,7 +28,7 @@ use std::time::{Duration, Instant};
 
 mod snake;
 
-const UPDATE_MILLIS_START: u64 = 250;
+const UPDATE_MILLIS_START: u64 = 120;
 const UPDATE_MILLIS_CHANGE: u64 = 1;
 const TILE_SIZE: f32 = 32.0;
 const GRID_DIMENSIONS: (CoordT, CoordT) = (30, 20);
