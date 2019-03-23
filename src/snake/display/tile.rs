@@ -1,9 +1,11 @@
-use crate::{CoordT, GRID_DIMENSIONS};
+use crate::{CoordT, GRID_DIMENSIONS, TILE_SIZE};
 use ggez::{
     graphics::{drawable_size, Color, DrawMode, Mesh, MeshBuilder},
     Context,
     GameResult,
 };
+use  ggez::graphics::Rect;
+use crate::WINDOW_DIMENSIONS;
 
 pub trait TileRepr {
     /// Get's the bounds of the tile. This method should be pretty much the same
@@ -14,29 +16,25 @@ pub trait TileRepr {
     /// The color of this tile
     fn color(&self) -> Color;
 
-    fn get_tile_mesh(&self, ctx: &mut Context) -> GameResult<Mesh> {
-        let (arena_w, arena_h) = drawable_size(ctx);
+    fn get_rect(&self) -> Rect {
         let bounds = self.bounds();
-        let tile_width = arena_w as f32 / GRID_DIMENSIONS.0 as f32;
-        let tile_height = arena_h as f32 / GRID_DIMENSIONS.1 as f32;
 
-        let x = tile_width * bounds[0] as f32;
-        let y = tile_height * bounds[1] as f32;
+        let x = TILE_SIZE * bounds[0] as f32;
+        let y = TILE_SIZE * bounds[1] as f32;
 
-        let rect = [x, y, tile_width, tile_height];
-        Mesh::new_rectangle(ctx, DrawMode::fill(), rect.into(), self.color())
+        Rect {
+            x,
+            y,
+            w: TILE_SIZE,
+            h: TILE_SIZE
+        }
+    }
+
+    fn get_tile_mesh(&self, ctx: &mut Context) -> GameResult<Mesh> {
+        Mesh::new_rectangle(ctx, DrawMode::fill(), self.get_rect(), self.color())
     }
 
     fn add_to_mesh_builder(&self, ctx: &Context, builder: &mut MeshBuilder) {
-        let (arena_w, arena_h) = drawable_size(ctx);
-        let bounds = self.bounds();
-        let tile_width = arena_w as f32 / GRID_DIMENSIONS.0 as f32;
-        let tile_height = arena_h as f32 / GRID_DIMENSIONS.1 as f32;
-
-        let x = tile_width * bounds[0] as f32;
-        let y = tile_height * bounds[1] as f32;
-
-        let rect = [x, y, tile_width, tile_height].into();
-        builder.rectangle(DrawMode::fill(), rect, self.color());
+        builder.rectangle(DrawMode::fill(), self.get_rect(), self.color());
     }
 }

@@ -6,12 +6,12 @@ use ggez::{
     Context,
     GameResult,
 };
+use arith::ModuloSigned;
+use super::GRID_DIMENSIONS;
 pub use segment::{validate_next_direction, Direction, Segment};
 use std::collections::VecDeque;
 
 pub type CoordT = isize;
-
-pub const GRID_DIMENSIONS: (CoordT, CoordT) = (30, 30);
 pub const DEFAULT_DIRECTION: Direction = Direction::Right;
 pub const DEFAULT_SNAKE_COORD: [CoordT; 2] =
     [GRID_DIMENSIONS.0 / 2, GRID_DIMENSIONS.1 / 2];
@@ -20,6 +20,7 @@ mod display;
 mod food;
 mod segment;
 pub mod snake_state;
+mod arith;
 
 #[derive(Debug, PartialEq)]
 pub struct Snake {
@@ -56,8 +57,9 @@ impl Snake {
     /// the snake is empty.
     pub fn head(&self) -> Option<&Segment> { (self.segements.front()) }
 
-    /// Computes the next virtual head of the snake. Should only return `None`
-    /// if the head of the snake does not exist (aka is `None`).
+    /// Computes the next virtual head of the snake. Returns an error if the head is out of bounds.
+
+    /// TODO: return more comprehensive error
     ///
     /// BUG: using the next head to calculate overlaps could be the source of
     /// bugs
@@ -132,20 +134,6 @@ impl Snake {
         } else {
             false
         }
-    }
-}
-
-trait ModuloSigned {
-    fn modulo(&self, n: Self) -> Self;
-}
-
-impl<T> ModuloSigned for T
-where
-    T: std::ops::Add<Output = T> + std::ops::Rem<Output = T> + Clone,
-{
-    fn modulo(&self, n: T) -> T {
-        // Because of our trait bounds, we can now apply these operators.
-        (self.clone() % n.clone() + n.clone()) % n.clone()
     }
 }
 
