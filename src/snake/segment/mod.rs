@@ -23,7 +23,6 @@ impl Segment {
 
     pub const fn position(&self) -> Point2<CoordT> { self.position }
 
-    #[allow(unused)]
     pub const fn direction(&self) -> Direction { self.direction }
 }
 

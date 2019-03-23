@@ -135,6 +135,10 @@ impl Snake {
             false
         }
     }
+
+    pub fn head_direction(&self) -> Option<Direction> {
+        Some(self.head()?.direction())
+    }
 }
 
 impl MeshRepr for Snake {

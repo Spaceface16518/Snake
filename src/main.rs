@@ -174,7 +174,7 @@ impl EventHandler for GameState {
             KeyCode::Right | KeyCode::D => Some(Direction::Right),
             _ => None,
         } {
-            if validate_next_direction(direction, self.input_direction) {
+            if validate_next_direction(direction, self.snake.head_direction().expect("Tried to get head direction of an empty snake")) {
                 self.input_direction = direction;
             }
         }
