@@ -14,7 +14,10 @@ pub struct Segment {
 }
 
 impl Segment {
-    pub fn new<P: Into<Point2<CoordT>>>(position: P, direction: Direction) -> Self {
+    pub fn new<P: Into<Point2<CoordT>>>(
+        position: P,
+        direction: Direction,
+    ) -> Self {
         Segment {
             position: position.into(),
             direction,

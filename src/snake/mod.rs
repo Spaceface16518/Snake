@@ -1,3 +1,5 @@
+use super::GRID_DIMENSIONS;
+use arith::ModuloSigned;
 pub use display::{clear_screen, MeshRepr, TileRepr};
 pub use food::Food;
 use ggez::{
@@ -6,8 +8,6 @@ use ggez::{
     Context,
     GameResult,
 };
-use arith::ModuloSigned;
-use super::GRID_DIMENSIONS;
 pub use segment::{validate_next_direction, Direction, Segment};
 use std::collections::VecDeque;
 
@@ -16,11 +16,11 @@ pub const DEFAULT_DIRECTION: Direction = Direction::Right;
 pub const DEFAULT_SNAKE_COORD: [CoordT; 2] =
     [GRID_DIMENSIONS.0 / 2, GRID_DIMENSIONS.1 / 2];
 
+mod arith;
 mod display;
 mod food;
 mod segment;
 pub mod snake_state;
-mod arith;
 
 #[derive(Debug, PartialEq)]
 pub struct Snake {
@@ -57,7 +57,8 @@ impl Snake {
     /// the snake is empty.
     pub fn head(&self) -> Option<&Segment> { (self.segements.front()) }
 
-    /// Computes the next virtual head of the snake. Returns an error if the head is out of bounds.
+    /// Computes the next virtual head of the snake. Returns an error if the
+    /// head is out of bounds.
 
     /// TODO: return more comprehensive error
     ///

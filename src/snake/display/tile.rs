@@ -1,11 +1,9 @@
-use crate::{CoordT, GRID_DIMENSIONS, TILE_SIZE};
+use crate::{CoordT, TILE_SIZE};
 use ggez::{
-    graphics::{drawable_size, Color, DrawMode, Mesh, MeshBuilder},
+    graphics::{Color, DrawMode, Mesh, MeshBuilder, Rect},
     Context,
     GameResult,
 };
-use  ggez::graphics::Rect;
-use crate::WINDOW_DIMENSIONS;
 
 pub trait TileRepr {
     /// Get's the bounds of the tile. This method should be pretty much the same
@@ -26,12 +24,17 @@ pub trait TileRepr {
             x,
             y,
             w: TILE_SIZE,
-            h: TILE_SIZE
+            h: TILE_SIZE,
         }
     }
 
     fn get_tile_mesh(&self, ctx: &mut Context) -> GameResult<Mesh> {
-        Mesh::new_rectangle(ctx, DrawMode::fill(), self.get_rect(), self.color())
+        Mesh::new_rectangle(
+            ctx,
+            DrawMode::fill(),
+            self.get_rect(),
+            self.color(),
+        )
     }
 
     fn add_to_mesh_builder(&self, ctx: &Context, builder: &mut MeshBuilder) {

@@ -32,14 +32,20 @@ const UPDATE_MILLIS_START: u64 = 250;
 const UPDATE_MILLIS_CHANGE: u64 = 1;
 const TILE_SIZE: f32 = 32.0;
 const GRID_DIMENSIONS: (CoordT, CoordT) = (30, 20);
-const WINDOW_DIMENSIONS: (f32, f32) = (GRID_DIMENSIONS.0 as f32 * TILE_SIZE, GRID_DIMENSIONS.1 as f32 * TILE_SIZE);
-
+const WINDOW_DIMENSIONS: (f32, f32) = (
+    GRID_DIMENSIONS.0 as f32 * TILE_SIZE,
+    GRID_DIMENSIONS.1 as f32 * TILE_SIZE,
+);
 
 fn main() -> GameResult {
     let (mut context, mut event_loop) =
         ContextBuilder::new("Snake Game", "Amrit Rathie")
             .window_setup(WindowSetup::default().title("Snake!"))
-            .window_mode(WindowMode::default().resizable(false).dimensions(WINDOW_DIMENSIONS.0, WINDOW_DIMENSIONS.1))
+            .window_mode(
+                WindowMode::default()
+                    .resizable(false)
+                    .dimensions(WINDOW_DIMENSIONS.0, WINDOW_DIMENSIONS.1),
+            )
             .build()?;
 
     let mut state = GameState::new(DEFAULT_SNAKE_COORD);
@@ -72,16 +78,14 @@ impl GameState {
             input_direction: DEFAULT_DIRECTION,
             game_over: false,
             last_update: Instant::now(),
-            update_millis: Duration::from_millis(UPDATE_MILLIS_START)
+            update_millis: Duration::from_millis(UPDATE_MILLIS_START),
         }
     }
 }
 
 impl EventHandler for GameState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
-        if Instant::now() - self.last_update
-            >= self.update_millis
-        {
+        if Instant::now() - self.last_update >= self.update_millis {
             if !self.game_over {
                 match self.snake_state {
                     SnakeState::Food => {
@@ -98,7 +102,8 @@ impl EventHandler for GameState {
                             GRID_DIMENSIONS.0,
                             GRID_DIMENSIONS.1,
                         );
-                        self.update_millis -= Duration::from_millis(UPDATE_MILLIS_CHANGE);
+                        self.update_millis -=
+                            Duration::from_millis(UPDATE_MILLIS_CHANGE);
                         // TODO: make sure food does not spawn on body
                         self.snake_state =
                             get_snake_state(&self.snake, &self.food);
@@ -174,7 +179,12 @@ impl EventHandler for GameState {
             KeyCode::Right | KeyCode::D => Some(Direction::Right),
             _ => None,
         } {
-            if validate_next_direction(direction, self.snake.head_direction().expect("Tried to get head direction of an empty snake")) {
+            if validate_next_direction(
+                direction,
+                self.snake
+                    .head_direction()
+                    .expect("Tried to get head direction of an empty snake"),
+            ) {
                 self.input_direction = direction;
             }
         }
