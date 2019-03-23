@@ -37,7 +37,7 @@ pub trait TileRepr {
         )
     }
 
-    fn add_to_mesh_builder(&self, ctx: &Context, builder: &mut MeshBuilder) {
+    fn add_to_mesh_builder(&self, builder: &mut MeshBuilder) {
         builder.rectangle(DrawMode::fill(), self.get_rect(), self.color());
     }
 }

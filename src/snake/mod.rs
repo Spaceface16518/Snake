@@ -147,7 +147,7 @@ impl MeshRepr for Snake {
         let mut builder = MeshBuilder::new();
 
         for segment in self.segements.iter() {
-            segment.add_to_mesh_builder(&ctx, &mut builder);
+            segment.add_to_mesh_builder(&mut builder);
         }
         builder.build(ctx)
     }
