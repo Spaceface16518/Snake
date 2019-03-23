@@ -97,11 +97,16 @@ impl EventHandler for GameState {
                             "Tried to compute the next head of an empty snake",
                         );
                         self.snake.compute_next_frame_with_new(new_head);
-                        self.food = Food::random(
-                            &mut self.rng,
-                            GRID_DIMENSIONS.0,
-                            GRID_DIMENSIONS.1,
-                        );
+                        self.food = loop {
+                            let tmp = Food::random(
+                                &mut self.rng,
+                                GRID_DIMENSIONS.0,
+                                GRID_DIMENSIONS.1,
+                            );
+                            if !self.snake.overlaps(&tmp) {
+                                break tmp
+                            }
+                        };
                         self.update_millis -=
                             Duration::from_millis(UPDATE_MILLIS_CHANGE);
                         // TODO: make sure food does not spawn on body
